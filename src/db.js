@@ -1,5 +1,5 @@
-import bluebird from 'bluebird';
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
+// Must import promise based driver for using then/await like syntax...
 import { MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, MYSQL_MAX_POOL } from "@env";
 
 
@@ -9,25 +9,46 @@ const cn = {
     user: MYSQL_USER,
     password: MYSQL_PASSWORD,
     database: MYSQL_DATABASE,
-    connectionLimit: MYSQL_MAX_POOL,
-    Promise: bluebird
+    connectionLimit: MYSQL_MAX_POOL
 }
 
-const pool = new mysql.Pool(cn)
+const Pool = new mysql.createPool(cn)
 
-const executeQuery = async (query, pool) => {
+const _execute = async (query, pool) => {
+    const [rows, fields] = await pool.execute(query)
+    return [rows, fields]
+}
+
+const executeQuery = async (query, pool, queryType) => {
     try {
-        const conn = await pool.getConnection()
-        let [rows, fields] = await conn.execute(query)
-        return [rows, fields]
+        if (queryType === 'void') {
+            return await _execute(query, pool)
+                .then(results => {
+                    return {
+                        status: true,
+                        rows: []
+                    }
+                })
+        } else if (queryType = 'select') {
+            return await _execute(query, pool)
+                .then(results => {
+                    return {
+                        status: true,
+                        rows: results[0]
+                    }
+                })
+        } else {
+            return {
+                status: false,
+                rows: []
+            }
+        }
     } catch (err) {
         throw new Error(err)
-    } finally {
-        pool.releaseConnection(conn)
     }
 }
 
 export default {
-    pool,
+    Pool,
     executeQuery
 }
