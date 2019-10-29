@@ -1,0 +1,13 @@
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    "add-module-exports",
+    [
+      "dotenv-import",
+      {
+        "moduleName": "@env",
+        "path": "config.env"
+      }
+    ]
+  ]
+}
