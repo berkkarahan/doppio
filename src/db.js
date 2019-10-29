@@ -15,7 +15,7 @@ const cn = {
 const Pool = new mysql.createPool(cn)
 
 const _execute = async (query, pool) => {
-    const [rows, fields] = await pool.execute(query)
+    const [rows, fields] = pool.execute(query)
     return [rows, fields]
 }
 
