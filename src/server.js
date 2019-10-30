@@ -8,6 +8,7 @@ import { PORT } from '@env'
 // {
 //     "presets": ["@babel/preset-env"],
 //     "plugins": [
+//       "@babel/plugin-proposal-class-properties",
 //       "add-module-exports",
 //       [
 //         "dotenv-import",
@@ -19,3 +20,6 @@ import { PORT } from '@env'
 //     ]
 //   }
 console.log("Getting ready..")
+const listener = app.listen(PORT, async function () {
+    console.log('Listening on port: ' + listener.address().port)
+})
