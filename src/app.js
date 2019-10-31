@@ -1,10 +1,14 @@
 import express from 'express'
 import expressWinston from 'express-winston'
 import winston from 'winston'
+import { getIpInfoMiddleware } from './middlewares/ip'
 
 const app = express()
 
 const UserRouter = require('./routes/user')
+
+// first use ip middleware. Adds IPAdress to request object.
+app.use(getIpInfoMiddleware)
 
 // express - winston logger before the router
 app.use(expressWinston.logger({
