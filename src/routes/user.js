@@ -9,7 +9,6 @@ UserRouter.use(urlencoded({ extended: true }))
 UserRouter.use(json())
 
 UserRouter.post('/user', async (req, res, next) => {
-    console.log('beep-boop')
     createUser(req, res, next)
 })
 

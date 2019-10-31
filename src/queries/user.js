@@ -1,5 +1,4 @@
 import { Pool, executeQuery } from '../db'
-import { defaultCipherList } from 'constants'
 
 const createUserQuery = async (usr) => {
     let keys = Object.keys(usr)
