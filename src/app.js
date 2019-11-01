@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-
 import db from './db';
+
+// Winston logger kurulacak.
 
 let app = express();
 app.set('trust proxy', 1);
@@ -23,36 +24,7 @@ app.get('/', (req, res) => {
 });
 
 // const UserRouter = require('./routes/user')
-
-// // first use ip middleware. Adds IPAdress to request object.
-// app.use(getIpInfoMiddleware)
-
-// // express - winston logger before the router
-// app.use(expressWinston.logger({
-//     transports: [
-//         new winston.transports.Console()
-//     ],
-//     format: winston.format.combine(
-//         winston.format.colorize(),
-//         winston.format.json(),
-//         winston.format.prettyPrint({
-//             colorize: true
-//         })
-//     )
-// }))
-
-// // use routers here
+// use routers here
 // app.use('/', UserRouter)
-
-// // express - winston errorLogger makes sense AFTER the router.
-// app.use(expressWinston.errorLogger({
-//     transports: [
-//         new winston.transports.Console()
-//     ],
-//     format: winston.format.combine(
-//         winston.format.colorize(),
-//         winston.format.json()
-//     )
-// }))
 
 export default app

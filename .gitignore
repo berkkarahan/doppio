@@ -62,4 +62,3 @@ typings/
 .eslintrc
 .prettierrc
 config.env
-src/try.js
