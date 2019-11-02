@@ -1,7 +1,9 @@
+console.log("Getting ready..")
 import '@babel/polyfill'
 import app from './app';
-import { PORT } from '@env'
-// const port = process.env.PORT;
+// import and configure dotenv only in the topmost fle(entry file) in the app
+import dotenv from 'dotenv'
+dotenv.config()
 
 // listener must be declared with const / var
 // .babelrc configuration is critical
@@ -9,17 +11,9 @@ import { PORT } from '@env'
 //     "presets": ["@babel/preset-env"],
 //     "plugins": [
 //       "@babel/plugin-proposal-class-properties",
-//       "add-module-exports",
-//       [
-//         "dotenv-import",
-//         {
-//           "moduleName": "@env",
-//           "path": "config.env"
-//         }
-//       ]
+//       "add-module-exports"
 //     ]
 //   }
-console.log("Getting ready..")
-const listener = app.listen(PORT, async function () {
+const listener = app.listen(process.env.PORT, async function () {
     console.log('Listening on port: ' + listener.address().port)
 })

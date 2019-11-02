@@ -1,7 +1,6 @@
 import User from '../serializers/user'
 import { createUserQuery, selectUserQuery } from '../queries/user'
 import bcrypt from 'bcrypt'
-import { PASSWORD_HASH_SALTINGROUNDS } from "@env"
 
 export const createUser = async (req, res, next) => {
     let user = new User(req.body)
@@ -17,7 +16,7 @@ export const createUser = async (req, res, next) => {
     user.is_active = 1
     user.is_verified = 0
 
-    await bcrypt.hash(user.password, parseInt(PASSWORD_HASH_SALTINGROUNDS))
+    await bcrypt.hash(user.password, parseInt(process.env.PASSWORD_HASH_SALTINGROUNDS))
         .then(hashedPassword => {
             user.password = hashedPassword
             return user
