@@ -12,9 +12,9 @@ const cn = {
     connectionLimit: process.env.MYSQL_MAX_POOL
 }
 
-const Pool = new mysql.createPool(cn)
+const pool = new mysql.createPool(cn)
 
-const _execute = async (query, pool) => {
+const _execute = async (query) => {
     let queryResult = await pool.execute(query)
     let result = {
         rows: queryResult[0],
@@ -23,7 +23,7 @@ const _execute = async (query, pool) => {
     return result
 }
 
-const executeQuery = async (query, pool, queryType) => {
+const executeQuery = async (query, queryType) => {
     try {
         if (queryType === 'void') {
             return await _execute(query, pool)
@@ -53,6 +53,5 @@ const executeQuery = async (query, pool, queryType) => {
 }
 
 export default {
-    Pool,
     executeQuery
 }

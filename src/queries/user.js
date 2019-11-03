@@ -1,5 +1,4 @@
-import { Pool, executeQuery } from '../db'
-import User from '../serializers/user'
+import { executeQuery } from '../db'
 
 const createUserQuery = async (usr) => {
     let keys = Object.keys(usr.values)
@@ -11,7 +10,7 @@ const createUserQuery = async (usr) => {
         .join(", ")
 
     let query = `INSERT INTO users ( ${keys} ) VALUES ( ${values} )`
-    let result = await executeQuery(query, Pool, 'void')
+    let result = await executeQuery(query, 'void')
     return result
 }
 
@@ -23,7 +22,7 @@ const selectUserQuery = async (usr) => {
     } else if (usr.values.username && query.length < 27) {
         query = query + `username = '${usr.values.username}'`
     }
-    let result = await executeQuery(query, Pool, 'select')
+    let result = await executeQuery(query, 'select')
     return result
 }
 
