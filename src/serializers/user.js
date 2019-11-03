@@ -10,7 +10,7 @@ class User {
         address: null,
         gender: ['male', 'female', 'other'],
         birthday: null,
-        role: ['user', 'owner', 'admin'],
+        role: ['user', 'owner'], // admin role should be created directly using 3rd party database administration
         register_ip: null,
         last_login_ip: null,
         ts_login: null,
