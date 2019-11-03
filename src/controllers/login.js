@@ -46,6 +46,12 @@ const loginController = async (req, res, next) => {
             })
             .then(responseJson => {
                 if (responseJson.status === 'success') {
+
+                    res.cookie('doppiojwt', response.token, { maxAge: 1800000 }) // 1800000 = 30min
+
+                    // writing token as cookie, no need to seng again in response
+                    delete responseJson.data
+
                     res.status(200).json(responseJson)
                 } else {
                     res.status(401).json(responseJson)

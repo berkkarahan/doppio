@@ -2,11 +2,11 @@ import * as jwt from 'jsonwebtoken'
 require('dotenv').config()
 
 const validateToken = async (req, res, next) => {
-    let authHeader = req.headers.authorization
+
     let result
-    if (authHeader) {
+    if (req.cookiesObject.doppiojwt) {
         try {
-            let token = req.headers.authorization.split(' ')[1]
+            let token = req.cookiesObject.doppiojwt
             let options = {
                 expiresIn: process.env.JWT_EXPIRESIN,
                 issuer: process.env.JWT_ISSUER
