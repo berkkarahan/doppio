@@ -4,6 +4,8 @@ import winston from 'winston'
 import { getIpInfoMiddleware } from './middlewares/ip'
 
 const app = express()
+// https://bitbucket.org/platformhermes/doppio/src/96faccb5a5f750cb279ea86794782682bc267d9a/src/app.js?at=refactor%2Farchitecture
+app.set('trust proxy', 1)
 
 const UserRouter = require('./routes/user')
 

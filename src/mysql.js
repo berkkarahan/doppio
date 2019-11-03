@@ -11,7 +11,7 @@ const cn = {
 
 const connection = mysql.createConnection(cn);
 
-const executeQuery = async (query, connection) => {
+const executeQuery = async (query) => {
     return new Promise((resolve, reject) => {
         connection.query(query, (err, data) => {
             connection.end();
@@ -21,6 +21,5 @@ const executeQuery = async (query, connection) => {
 };
 
 export default {
-    connection,
     executeQuery
 }
