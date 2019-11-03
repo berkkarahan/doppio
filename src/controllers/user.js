@@ -60,7 +60,7 @@ export const createUser = async (req, res, next) => {
 }
 
 export const selectUser = async (req, res, next) => {
-    let user = new User(req)
+    let user = new User(req.body)
     await selectUserQuery(user)
         .then(queryResult => {
             return new User(queryResult)

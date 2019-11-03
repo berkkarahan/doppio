@@ -1,5 +1,7 @@
 import mysql from 'mysql2/promise';
 // Must import promise based driver for using then/await like syntax...
+import dotenv from 'dotenv'
+dotenv.config()
 
 const cn = {
     host: process.env.MYSQL_HOST,

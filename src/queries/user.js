@@ -19,10 +19,11 @@ const selectUserQuery = async (usr) => {
     let query = `SELECT * from users WHERE `
     // select query prioritizes email over username if both exists in User serializer
     if (usr.email) {
-        query = query + `email = ${usr.email}`
+        query = query + `email = '${usr.email}'`
     } else if (usr.username && query.length < 27) {
-        query = query + `username = ${usr.username}`
+        query = query + `username = '${usr.username}'`
     }
+    console.log(query)
     let result = await executeQuery(query, Pool, 'select')
     return result
 }
