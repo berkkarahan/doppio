@@ -15,8 +15,12 @@ const cn = {
 const Pool = new mysql.createPool(cn)
 
 const _execute = async (query, pool) => {
-    const [rows, fields] = pool.execute(query)
-    return [rows, fields]
+    let queryResult = await pool.execute(query)
+    let result = {
+        rows: queryResult[0],
+        fields: queryResult[1]
+    }
+    return result
 }
 
 const executeQuery = async (query, pool, queryType) => {
@@ -34,7 +38,7 @@ const executeQuery = async (query, pool, queryType) => {
                 .then(results => {
                     return {
                         status: true,
-                        rows: results[0]
+                        rows: results['rows']
                     }
                 })
         } else {

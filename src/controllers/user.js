@@ -63,21 +63,20 @@ export const selectUser = async (req, res, next) => {
     let user = new User(req.body)
     await selectUserQuery(user)
         .then(queryResult => {
-            return new User(queryResult)
-        })
-        .then(queryResult => {
+            let user = new User(queryResult.rows[0])
+            let values = user.parseValues()
             if (queryResult.status === true) {
                 return {
                     status: 'success',
                     data: {
-                        user
+                        values
                     }
                 }
             } else {
                 return {
                     status: 'failure-query execution failure.',
                     data: {
-                        user
+                        values
                     }
                 }
             }

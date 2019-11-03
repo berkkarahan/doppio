@@ -1,5 +1,6 @@
 class User {
     tableFields = {
+        id: null,
         username: null,
         email: null,
         password: null,
@@ -17,6 +18,8 @@ class User {
         is_active: [0, 1],
         is_verified: [0, 1]
     }
+    values = {
+    }
     constructor(row) {
         Object.entries(row)
             .forEach((keyValueTuple) => {
@@ -24,10 +27,10 @@ class User {
                 const value = keyValueTuple[1]
                 if (key in this.tableFields) {
                     if (this.tableFields[key] === null) {
-                        this[key] = value
+                        this.values[key] = value
                     } else {
                         if (this.tableFields[key].indexOf(value) > -1) {
-                            this[key] = value
+                            this.values[key] = value
                         } else {
                             throw new Error("Value for key: " + key + " is not in default values.")
                         }
@@ -36,6 +39,9 @@ class User {
                     throw new Error("Key: " + key + " is not in users table.")
                 }
             })
+    }
+    parseValues() {
+        return this.values
     }
 }
 

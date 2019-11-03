@@ -2,9 +2,9 @@ import { Pool, executeQuery } from '../db'
 import User from '../serializers/user'
 
 const createUserQuery = async (usr) => {
-    let keys = Object.keys(usr)
+    let keys = Object.keys(usr.values)
         .join(", ")
-    let values = Object.values(usr)
+    let values = Object.values(usr.values)
         .map((val) => {
             return "'" + val + "'"
         })
@@ -18,12 +18,11 @@ const createUserQuery = async (usr) => {
 const selectUserQuery = async (usr) => {
     let query = `SELECT * from users WHERE `
     // select query prioritizes email over username if both exists in User serializer
-    if (usr.email) {
-        query = query + `email = '${usr.email}'`
-    } else if (usr.username && query.length < 27) {
-        query = query + `username = '${usr.username}'`
+    if (usr.values.email) {
+        query = query + `email = '${usr.values.email}'`
+    } else if (usr.values.username && query.length < 27) {
+        query = query + `username = '${usr.values.username}'`
     }
-    console.log(query)
     let result = await executeQuery(query, Pool, 'select')
     return result
 }

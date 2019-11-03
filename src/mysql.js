@@ -1,5 +1,5 @@
 import mysql from 'mysql'
-// require('dotenv').config();
+require('dotenv').config();
 
 const cn = {
     host: process.env.MYSQL_HOST,
