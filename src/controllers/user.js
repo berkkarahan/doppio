@@ -1,9 +1,59 @@
 import User from '../serializers/user'
-import { createUserQuery, selectUserQuery } from '../queries/user'
+import { createUserQuery, selectUserQuery, updateUserQuery } from '../queries/user'
 import bcrypt from 'bcrypt'
 require('dotenv').config()
 
 console.log(process.env.PASSWORD_HASH_SALTINGROUNDS)
+
+export const updateUser = async (req, res, next) => {
+    let user = new User(req.body)
+
+    // remove fields that should not be directly updated
+    delete user.values.ts_login
+    delete user.values.last_login_ip
+    delete user.values.ts_register
+    delete user.values.register_ip
+    delete user.values.is_active
+    delete user.values.is_verified
+    delete user.values.id
+
+    await updateUserQuery(user)
+        .then(queryResult => {
+            let user = new User(queryResult.rows[0])
+            let values = user.parseValues()
+            if (queryResult.status === true) {
+                return {
+                    status: 'success',
+                    data: {
+                        values
+                    }
+                }
+            } else {
+                return {
+                    status: 'failure-query execution failure.',
+                    data: {
+                        values
+                    }
+                }
+            }
+        })
+        .then(responseJson => {
+            if (responseJson.status === 'success') {
+                res.status(201).json(responseJson)
+            } else {
+                res.status(400).json(responseJson)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).json({
+                status: 'failure',
+                data: {
+                    error: err
+                }
+            })
+        })
+}
 
 export const createUser = async (req, res, next) => {
     let user = new User(req.body)
@@ -20,6 +70,7 @@ export const createUser = async (req, res, next) => {
     user.values.is_verified = 0
 
     // finally remove any fields that should not be created with a createUser request: ts_login, last_login_ip
+    delete user.values.id
     delete user.values.ts_login
     delete user.values.last_login_ip
 

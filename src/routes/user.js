@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { urlencoded, json } from 'body-parser'
 
-import { createUser, selectUser } from '../controllers/user'
-import login, { loginController } from '../controllers/login';
+import { createUser, selectUser, updateUser } from '../controllers/user'
+import { loginController } from '../controllers/login';
 
 const UserRouter = Router()
 
@@ -14,12 +14,19 @@ UserRouter.post('/login', async (req, res, next) => {
     loginController(req, res, next)
 })
 
+// create user
 UserRouter.post('/user', async (req, res, next) => {
     createUser(req, res, next)
 })
 
+// get user
 UserRouter.get('/user', async (req, res, next) => {
     selectUser(req, res, next)
+})
+
+// update user
+UserRouter.patch('/user', async (req, res, next) => {
+    updateUser(req, res, next)
 })
 
 export default UserRouter

@@ -1,3 +1,5 @@
+import validator from 'validator'
+
 class User {
     tableFields = {
         id: null,
@@ -18,6 +20,10 @@ class User {
         is_active: [0, 1],
         is_verified: [0, 1]
     }
+    fieldValidators = {
+        email: validator.isEmail,
+        phone: validator.isMobilePhone
+    }
     values = {
     }
     constructor(row) {
@@ -27,10 +33,30 @@ class User {
                 const value = keyValueTuple[1]
                 if (key in this.tableFields) {
                     if (this.tableFields[key] === null) {
-                        this.values[key] = value
+                        // validators for fields
+                        if (this.fieldValidators[key]) {
+                            let validatorFunc = this.fieldValidators[key]
+                            if (validatorFunc(value)) {
+                                this.values[key] = value
+                            } else {
+                                throw new Error("Validator for: " + key + " is not satisfied for value: " + value)
+                            }
+                        } else {
+                            this.values[key] = value
+                        }
                     } else {
                         if (this.tableFields[key].indexOf(value) > -1) {
-                            this.values[key] = value
+                            // validators for fields
+                            if (this.fieldValidators[key]) {
+                                let validatorFunc = this.fieldValidators[key]
+                                if (validatorFunc(value)) {
+                                    this.values[key] = value
+                                } else {
+                                    throw new Error("Validator for: " + key + " is not satisfied for value: " + value)
+                                }
+                            } else {
+                                this.values[key] = value
+                            }
                         } else { // hotpatch role for admin so that no error is thrown
                             if (key === 'role' && value === 'admin') {
                                 this.values[key] = value
