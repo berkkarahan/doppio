@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken'
-require('dotenv').config()
+import dotenv from 'dotenv'
+dotenv.config()
 
 const validateToken = async (req, res, next) => {
 

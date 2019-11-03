@@ -2,7 +2,8 @@ import User from '../serializers/user'
 import { selectUserQuery } from '../queries/user'
 import bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
-require('dotenv').config()
+import dotenv from 'dotenv'
+dotenv.config()
 
 const loginController = async (req, res, next) => {
     // who is trying to log in

@@ -1,7 +1,8 @@
 import User from '../serializers/user'
 import { createUserQuery, selectUserQuery, updateUserQuery } from '../queries/user'
 import bcrypt from 'bcrypt'
-require('dotenv').config()
+import dotenv from 'dotenv'
+dotenv.config()
 
 console.log(process.env.PASSWORD_HASH_SALTINGROUNDS)
 
