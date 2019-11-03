@@ -31,8 +31,12 @@ class User {
                     } else {
                         if (this.tableFields[key].indexOf(value) > -1) {
                             this.values[key] = value
-                        } else {
-                            throw new Error("Value for key: " + key + " is not in default values.")
+                        } else { // hotpatch role for admin so that no error is thrown
+                            if (key === 'role' && value === 'admin') {
+                                this.values[key] = value
+                            } else {
+                                throw new Error("Value for key: " + key + " is not in default values.")
+                            }
                         }
                     }
                 } else {
