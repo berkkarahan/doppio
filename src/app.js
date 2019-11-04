@@ -2,7 +2,6 @@ import express from 'express'
 import expressWinston from 'express-winston'
 import winston from 'winston'
 import cookieParser from 'cookie-parser'
-import { makeCookiesObject } from './middlewares/cookies'
 import { getIpInfoMiddleware } from './middlewares/ip'
 
 const app = express()
@@ -17,7 +16,6 @@ app.use(getIpInfoMiddleware)
 // cookie-parser, with custom json object which parses and adds to req header
 // doppiojwt is the cookie name for jwt token
 app.use(cookieParser())
-app.use(makeCookiesObject)
 
 // express - winston logger before the router
 app.use(expressWinston.logger({

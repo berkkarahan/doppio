@@ -5,9 +5,9 @@ dotenv.config()
 const validateToken = async (req, res, next) => {
 
     let result
-    if (req.cookiesObject.doppiojwt) {
+    if (req.cookies.doppiojwt) {
         try {
-            let token = req.cookiesObject.doppiojwt
+            let token = req.cookies.doppiojwt
             let options = {
                 expiresIn: process.env.JWT_EXPIRESIN,
                 issuer: process.env.JWT_ISSUER
