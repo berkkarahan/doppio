@@ -42,6 +42,13 @@ const selectUserQuery = async (usr) => {
         query = query + `username = '${usr.values.username}'`
     }
     let result = await executeQuery(query, 'select')
+    // null values should be deleted before retrieval
+    Object.entries(result.rows[0])
+        .forEach(([k, v]) => {
+            if (v === null) {
+                delete result.rows[0][k]
+            }
+        })
     return result
 }
 
