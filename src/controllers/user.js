@@ -6,6 +6,94 @@ dotenv.config()
 
 console.log(process.env.PASSWORD_HASH_SALTINGROUNDS)
 
+export const activateUser = async (req, res, next) => {
+    // we are not actually deleting user here, instead setting is_active to 1(true).
+    // since this will be a protected call, it is safe to user decodedPayload resulting from jwt token validation.
+    let user = new User(req.decodedPayload)
+    user.is_active = 1
+
+    await updateUserQuery(user)
+        .then(queryResult => {
+            let user = new User(queryResult.rows[0])
+            let values = user.parseValues()
+            if (queryResult.status === true) {
+                return {
+                    status: 'success',
+                    data: {
+                        values
+                    }
+                }
+            } else {
+                return {
+                    status: 'failure-query execution failure.',
+                    data: {
+                        values
+                    }
+                }
+            }
+        })
+        .then(responseJson => {
+            if (responseJson.status === 'success') {
+                res.status(201).json(responseJson)
+            } else {
+                res.status(400).json(responseJson)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).json({
+                status: 'failure',
+                data: {
+                    error: err
+                }
+            })
+        })
+}
+
+export const deactivateUser = async (req, res, next) => {
+    // we are not actually deleting user here, instead setting is_active to 0(false).
+    // since this will be a protected call, it is safe to user decodedPayload resulting from jwt token validation.
+    let user = new User(req.decodedPayload)
+    user.is_active = 0
+
+    await updateUserQuery(user)
+        .then(queryResult => {
+            let user = new User(queryResult.rows[0])
+            let values = user.parseValues()
+            if (queryResult.status === true) {
+                return {
+                    status: 'success',
+                    data: {
+                        values
+                    }
+                }
+            } else {
+                return {
+                    status: 'failure-query execution failure.',
+                    data: {
+                        values
+                    }
+                }
+            }
+        })
+        .then(responseJson => {
+            if (responseJson.status === 'success') {
+                res.status(201).json(responseJson)
+            } else {
+                res.status(400).json(responseJson)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(400).json({
+                status: 'failure',
+                data: {
+                    error: err
+                }
+            })
+        })
+}
+
 export const updateUser = async (req, res, next) => {
     let user = new User(req.body)
 
