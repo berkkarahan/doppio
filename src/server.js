@@ -14,6 +14,6 @@ dotenv.config()
 //       "add-module-exports"
 //     ]
 //   }
-const listener = app.listen(process.env.PORT, async function () {
+const listener = app.listen(process.env.PORT, function () {
     console.log('Listening on port: ' + listener.address().port)
 })
