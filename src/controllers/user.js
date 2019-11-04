@@ -4,8 +4,6 @@ import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 dotenv.config()
 
-console.log(process.env.PASSWORD_HASH_SALTINGROUNDS)
-
 export const activateUser = async (req, res, next) => {
     // we are not actually deleting user here, instead setting is_active to 1(true).
     // since this will be a protected call, it is safe to user decodedPayload resulting from jwt token validation.
