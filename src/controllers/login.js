@@ -52,17 +52,16 @@ const loginController = async (req, res, next) => {
                     user_.values.last_login_ip = req.IPAdress
 
                     // call update for login & timestamp
-                    await updateUserQuery(user_)
-                        .then(queryResult => {
-                            if (queryResult !== true) {
-                                res.status(401).json({
-                                    status: 'failure-timestamd and ip update for login failed',
-                                    data: {
+                    let updateResult = updateUserQuery(user_)
+                    if (updateResult !== true) {
+                        res.status(401).json({
+                            status: 'failure-timestamd and ip update for login failed',
+                            data: {
 
-                                    }
-                                })
                             }
                         })
+                    }
+
 
                     response.data = token
                     response.status = 'success'
