@@ -12,7 +12,7 @@ UserRouter.use(urlencoded({ extended: true }))
 UserRouter.use(json())
 
 // Login route here
-UserRouter.post('/login', async (req, res, next) => {
+UserRouter.post('/user/login', async (req, res, next) => {
     loginController(req, res, next)
 })
 
