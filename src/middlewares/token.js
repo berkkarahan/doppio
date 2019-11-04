@@ -12,7 +12,7 @@ const validateToken = async (req, res, next) => {
                 expiresIn: process.env.JWT_EXPIRESIN,
                 issuer: process.env.JWT_ISSUER
             }
-            // decode token as {user:username, role:userrole}
+            // decode token as {username:username, email:email, role:role}
             result = jwt.verify(token, process.env.JWT_SECRET, options)
             // pass decoded payload back to request
             req.decodedPayload = result
