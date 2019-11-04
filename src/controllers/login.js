@@ -19,7 +19,7 @@ const loginController = async (req, res, next) => {
     }
     let queryResult = await selectUserQuery(user)
     if (queryResult.status === true) {
-        user = queryResult.data.values
+        user = new User(queryResult.rows[0])
         await bcrypt.compare(password, user.values.password)
             .then(isMatch => {
                 if (isMatch) {
@@ -41,7 +41,7 @@ const loginController = async (req, res, next) => {
                     // last login ip & timestamp update
                     let user_ = new User()
 
-                    // set key for updatequery
+                    //set key for updatequery
                     user_.values.email = email
 
                     // set register date as timestamp -> 'YYYY-MM-DD hh:mm:ss' mysql datetime
