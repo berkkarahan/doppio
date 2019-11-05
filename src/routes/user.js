@@ -5,6 +5,7 @@ import { createUser, selectUser, updateUser, activateUser, deactivateUser } from
 import { loginController } from '../controllers/login';
 
 import { validateToken } from '../middlewares/token'
+import { authorizeRoute } from '../utils/authorization'
 
 const UserRouter = Router()
 
@@ -23,7 +24,7 @@ UserRouter.post('/user', async (req, res, next) => {
 
 // get user
 UserRouter.get('/user', validateToken, async (req, res, next) => {
-    if (req.decodedPayload.role === 'admin' || ((req.decodedPayload.username === req.body.username) || (req.decodedPayload.email === req.body.email))) {
+    if (authorizeRoute(req)) {
         selectUser(req, res, next)
     } else {
         res.status(401).json({
@@ -37,7 +38,7 @@ UserRouter.get('/user', validateToken, async (req, res, next) => {
 
 // update user
 UserRouter.patch('/user', validateToken, async (req, res, next) => {
-    if (req.decodedPayload.role === 'admin' || ((req.decodedPayload.username === req.body.username) || (req.decodedPayload.email === req.body.email))) {
+    if (authorizeRoute(req)) {
         updateUser(req, res, next)
     } else {
         res.status(401).json({
@@ -51,7 +52,7 @@ UserRouter.patch('/user', validateToken, async (req, res, next) => {
 
 // no hard deletes, just update with is_active = 0
 UserRouter.delete('/user/deactivate', validateToken, async (req, res, next) => {
-    if (req.decodedPayload.role === 'admin' || ((req.decodedPayload.username === req.body.username) || (req.decodedPayload.email === req.body.email))) {
+    if (authorizeRoute(req)) {
         deactivateUser(req, res, next)
     } else {
         res.status(401).json({
@@ -65,7 +66,7 @@ UserRouter.delete('/user/deactivate', validateToken, async (req, res, next) => {
 
 // how to activate user once he has deactivated ??
 UserRouter.patch('/user/activate', validateToken, async (req, res, next) => {
-    if (req.decodedPayload.role === 'admin' || ((req.decodedPayload.username === req.body.username) || (req.decodedPayload.email === req.body.email))) {
+    if (authorizeRoute(req)) {
         deactivateUser(req, res, next)
     } else {
         res.status(401).json({
