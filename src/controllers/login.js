@@ -23,6 +23,7 @@ const loginController = async (req, res, next) => {
         await bcrypt.compare(password, user.values.password)
             .then(isMatch => {
                 if (isMatch) {
+                    console.log("Ismatch: " + isMatch)
                     let payload = {
                         username: user.values.username,
                         email: user.values.email,
@@ -39,7 +40,7 @@ const loginController = async (req, res, next) => {
                         options
                     )
                     // last login ip & timestamp update
-                    let user_ = new User()
+                    let user_ = new User({})
 
                     //set key for updatequery
                     user_.values.email = email
@@ -51,16 +52,17 @@ const loginController = async (req, res, next) => {
                     user_.values.last_login_ip = req.IPAdress
 
                     // call update for login & timestamp
-                    let updateResult = updateUserQuery(user_)
-                    if (updateResult !== true) {
-                        res.status(401).json({
-                            status: 'failure-timestamd and ip update for login failed',
-                            data: {
+                    updateUserQuery(user_)
+                        .then(updateResult => {
+                            if (updateResult.status !== true) {
+                                res.status(401).json({
+                                    status: 'failure-timestamp and ip update for login failed',
+                                    data: {
 
+                                    }
+                                })
                             }
                         })
-                    }
-
 
                     response.data = token
                     response.status = 'success'
@@ -75,7 +77,7 @@ const loginController = async (req, res, next) => {
                     res.cookie('doppiojwt', response.token, { maxAge: 1800000 }) // 1800000 = 30min
 
                     // writing token as cookie, no need to seng again in response
-                    delete responseJson.data
+                    // delete responseJson.data
 
                     res.status(200).json(responseJson)
                 } else {
