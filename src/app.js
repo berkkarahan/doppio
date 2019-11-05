@@ -2,7 +2,11 @@ import express from 'express'
 import expressWinston from 'express-winston'
 import winston from 'winston'
 import cookieParser from 'cookie-parser'
+
 import { getIpInfoMiddleware } from './middlewares/ip'
+import { verificationRouter } from './routes/verification'
+import { userRouter } from './routes/user'
+
 import dotenv from 'dotenv'
 dotenv.config()
 

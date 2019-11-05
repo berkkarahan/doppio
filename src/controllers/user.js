@@ -1,5 +1,6 @@
 import User from '../serializers/user'
 import { createUserQuery, selectUserQuery, updateUserQuery } from '../queries/user'
+import { createVerificationToken } from './verification'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -187,8 +188,17 @@ export const createUser = async (req, res, next) => {
             }
         })
         .then(responseJson => {
+            // in case of any errors in the create route, fix here.
             if (responseJson.status === 'success') {
-                res.status(201).json(responseJson)
+                createVerificationToken(req).then(vrfResult => {
+                    if (vrfResult.status === 'success') {
+                        responseJson.vToken = response.verification
+                        res.status(201).json(responseJson)
+                    } else {
+                        responseJson.status = vrfResult.status
+                        res.status(400).json(responseJson)
+                    }
+                })
             } else {
                 res.status(400).json(responseJson)
             }

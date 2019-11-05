@@ -7,23 +7,30 @@ import { loginController } from '../controllers/login';
 import { validateToken } from '../middlewares/token'
 import { authorizeRoute } from '../utils/authorization'
 
-const UserRouter = Router()
+const userRouter = Router()
 
-UserRouter.use(urlencoded({ extended: true }))
-UserRouter.use(json())
+userRouter.use(urlencoded({ extended: true }))
+userRouter.use(json())
 
+// routes only for debugging
+userRouter.get('/d/user', async (req, res, next) => {
+    selectUser(req, res, next)
+})
+
+
+// Actual routes start;
 // Login route here
-UserRouter.post('/user/login', async (req, res, next) => {
+userRouter.post('/user/login', async (req, res, next) => {
     loginController(req, res, next)
 })
 
 // create user
-UserRouter.post('/user', async (req, res, next) => {
+userRouter.post('/user', async (req, res, next) => {
     createUser(req, res, next)
 })
 
 // get user
-UserRouter.get('/user', validateToken, async (req, res, next) => {
+userRouter.get('/user', validateToken, async (req, res, next) => {
     if (authorizeRoute(req)) {
         selectUser(req, res, next)
     } else {
@@ -37,7 +44,7 @@ UserRouter.get('/user', validateToken, async (req, res, next) => {
 })
 
 // update user
-UserRouter.patch('/user', validateToken, async (req, res, next) => {
+userRouter.patch('/user', validateToken, async (req, res, next) => {
     if (authorizeRoute(req)) {
         updateUser(req, res, next)
     } else {
@@ -51,7 +58,7 @@ UserRouter.patch('/user', validateToken, async (req, res, next) => {
 })
 
 // no hard deletes, just update with is_active = 0
-UserRouter.delete('/user/deactivate', validateToken, async (req, res, next) => {
+userRouter.delete('/user/deactivate', validateToken, async (req, res, next) => {
     if (authorizeRoute(req)) {
         deactivateUser(req, res, next)
     } else {
@@ -65,7 +72,7 @@ UserRouter.delete('/user/deactivate', validateToken, async (req, res, next) => {
 })
 
 // how to activate user once he has deactivated ??
-UserRouter.patch('/user/activate', validateToken, async (req, res, next) => {
+userRouter.patch('/user/activate', validateToken, async (req, res, next) => {
     if (authorizeRoute(req)) {
         deactivateUser(req, res, next)
     } else {
@@ -78,4 +85,4 @@ UserRouter.patch('/user/activate', validateToken, async (req, res, next) => {
     }
 })
 
-export default UserRouter
+export default userRouter

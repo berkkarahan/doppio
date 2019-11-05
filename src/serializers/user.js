@@ -18,7 +18,8 @@ class User {
         ts_login: null,
         ts_register: null,
         is_active: [0, 1],
-        is_verified: [0, 1]
+        is_verified: [0, 1],
+        verificationtoken: null
     }
     fieldValidators = {
         email: validator.isEmail,
