@@ -19,6 +19,8 @@ const loginController = async (req, res, next) => {
     }
     let queryResult = await selectUserQuery(user)
     if (queryResult.status === true) {
+        // initialize mutable token variable
+        var token = 0
         user = new User(queryResult.rows[0])
         await bcrypt.compare(password, user.values.password)
             .then(isMatch => {
@@ -34,7 +36,8 @@ const loginController = async (req, res, next) => {
                         issuer: process.env.JWT_ISSUER
                     }
                     let secret = process.env.JWT_SECRET
-                    let token = jwt.sign(
+                    // assign jwt to token variable defined at top scope
+                    token = jwt.sign(
                         payload,
                         secret,
                         options
@@ -64,7 +67,6 @@ const loginController = async (req, res, next) => {
                             }
                         })
 
-                    response.data = token
                     response.status = 'success'
                 } else {
                     response.status = 'failure-couldnt match provided passwords'
@@ -74,12 +76,14 @@ const loginController = async (req, res, next) => {
             .then(responseJson => {
                 if (responseJson.status === 'success') {
 
-                    res.cookie('doppiojwt', response.token, { maxAge: 1800000 }) // 1800000 = 30min
+                    let options = {
+                        maxAge: 1000 * 60 * 30, // would expire after 30 minutes
+                        httpOnly: true, // The cookie only accessible by the web server
+                        signed: true // Indicates if the cookie should be signed
+                    }
 
-                    // writing token as cookie, no need to seng again in response
-                    // delete responseJson.data
+                    res.status(200).cookie('doppiojwt', token, options).json(responseJson)
 
-                    res.status(200).json(responseJson)
                 } else {
                     res.status(401).json(responseJson)
                 }
