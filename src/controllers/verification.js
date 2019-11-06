@@ -1,7 +1,6 @@
 import User from '../serializers/user'
 import { selectUserQuery, updateUserQuery } from '../queries/user'
 import { executeQuery } from '../db'
-import bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import dotenv from 'dotenv'
@@ -14,17 +13,6 @@ export const validateVerificationToken = async (req) => {
     // if it is valid, user will be updated as verified. if it is invalid due to expiration the token will be deleted
     // query params will be used for this route, not the body
     // token variable will come from query params
-    let queryToken = req.query.token
-    let queryUserName = req.query.username
-
-    let user = new User({ username: queryUserName })
-
-    let selectResult = await selectUserQuery(user)
-
-    let options = {
-        expiresIn: process.env.JWT_EXPIRESIN,
-        issuer: process.env.JWT_ISSUER
-    }
 
     // declare response here and fill out rest wrt events
     let response = {
@@ -33,6 +21,26 @@ export const validateVerificationToken = async (req) => {
 
         }
     }
+
+    let queryToken = req.query.token
+    let queryUserName = req.query.username
+
+    let user = new User({ username: queryUserName })
+
+    console.log(user)
+
+    let selectResult = await selectUserQuery(user)
+    if (selectResult.status === false) {
+        response.status = 'failure-this user does not exist'
+        return response
+    }
+
+    let options = {
+        expiresIn: process.env.JWT_EXPIRESIN,
+        issuer: process.env.JWT_ISSUER
+    }
+
+
 
     if (selectResult.status === true) {
         if (selectResult.rows.verificationtoken) {

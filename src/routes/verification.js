@@ -25,6 +25,7 @@ verificationRouter.post('/verify', async (req, res, next) => {
 
 verificationRouter.get('/verify/validate', async (req, res, next) => {
     let response = await validateVerificationToken(req)
+    res.json(response)
 })
 
 export default { verificationRouter }

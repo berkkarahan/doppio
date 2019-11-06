@@ -37,7 +37,6 @@ const executeQuery = async (query, queryType) => {
         } else if (queryType = 'select') {
             return await _execute(query, pool)
                 .then(results => {
-                    console.log(results['rows'])
                     let returnResult = {
                         status: null,
                         rows: results['rows']
