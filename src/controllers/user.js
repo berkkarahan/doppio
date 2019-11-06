@@ -2,8 +2,7 @@ import User from '../serializers/user'
 import { createUserQuery, selectUserQuery, updateUserQuery } from '../queries/user'
 import { createVerificationToken } from './verification'
 import bcrypt from 'bcrypt'
-import dotenv from 'dotenv'
-dotenv.config()
+import { config } from '../config'
 
 export const activateUser = async (req, res, next) => {
     // we are not actually deleting user here, instead setting is_active to 1(true).
@@ -162,7 +161,7 @@ export const createUser = async (req, res, next) => {
     delete user.values.ts_login
     delete user.values.last_login_ip
 
-    await bcrypt.hash(user.values.password, parseInt(process.env.PASSWORD_HASH_SALTINGROUNDS))
+    await bcrypt.hash(user.values.password, parseInt(config.PASSWORD_HASH_SALTINGROUNDS))
         .then(hashedPassword => {
             user.values.password = hashedPassword
             return user

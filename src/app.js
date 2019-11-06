@@ -7,8 +7,7 @@ import { getIpInfoMiddleware } from './middlewares/ip'
 import { verificationRouter } from './routes/verification'
 import { userRouter } from './routes/user'
 
-import dotenv from 'dotenv'
-dotenv.config()
+import { config } from './config'
 
 const app = express()
 // https://bitbucket.org/platformhermes/doppio/src/96faccb5a5f750cb279ea86794782682bc267d9a/src/app.js?at=refactor%2Farchitecture
@@ -21,7 +20,7 @@ app.use(getIpInfoMiddleware)
 
 // cookie-parser, with custom json object which parses and adds to req header
 // doppiojwt is the cookie name for jwt token
-app.use(cookieParser(process.env.COOKIE_SECRET))
+app.use(cookieParser(config.COOKIE_SECRET))
 
 // express - winston logger before the router
 app.use(expressWinston.logger({

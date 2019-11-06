@@ -1,6 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-dotenv.config()
+import { config } from '../config'
 
 const validateToken = async (req, res, next) => {
 
@@ -9,11 +8,11 @@ const validateToken = async (req, res, next) => {
         try {
             let token = req.cookies.doppiojwt
             let options = {
-                expiresIn: process.env.JWT_EXPIRESIN,
-                issuer: process.env.JWT_ISSUER
+                expiresIn: config.JWT_EXPIRESIN,
+                issuer: config.JWT_ISSUER
             }
             // decode token as {username:username, email:email, role:role}
-            result = jwt.verify(token, process.env.JWT_SECRET, options)
+            result = jwt.verify(token, config.JWT_SECRET, options)
             // pass decoded payload back to request
             req.decodedPayload = result
             // call next

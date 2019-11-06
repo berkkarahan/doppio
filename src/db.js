@@ -1,15 +1,15 @@
 import mysql from 'mysql2/promise';
 // Must import promise based driver for using then/await like syntax...
-import dotenv from 'dotenv'
-dotenv.config()
+import { config } from './config'
+
 
 const cn = {
-    host: process.env.MYSQL_HOST,
-    port: process.env.MYSQL_PORT,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    connectionLimit: process.env.MYSQL_MAX_POOL
+    host: config.MYSQL_HOST,
+    port: config.MYSQL_PORT,
+    user: config.MYSQL_USER,
+    password: config.MYSQL_PASSWORD,
+    database: config.MYSQL_DATABASE,
+    connectionLimit: config.MYSQL_MAX_POOL
 }
 
 const pool = new mysql.createPool(cn)

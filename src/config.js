@@ -1,7 +1,8 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-const config = {
+export const config = {
+    PORT: process.env.PORT,
     JWT_SECRET: process.env.JWT_SECRET,
     JWT_ISSUER: process.env.JWT_ISSUER,
     JWT_EXPIRESINS: process.env.JWT_EXPIRESINS,
@@ -18,5 +19,3 @@ const config = {
     COOKIE_SECRET: process.env.COOKIE_SECRET,
     VERIFICATION_JWT_EXPIRESIN: process.env.VERIFICATION_JWT_EXPIRESIN
 }
-
-export default { config }

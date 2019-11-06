@@ -2,8 +2,7 @@ import User from '../serializers/user'
 import { selectUserQuery, updateUserQuery } from '../queries/user'
 import bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-dotenv.config()
+import { config } from '../config'
 
 const loginController = async (req, res, next) => {
     // who is trying to log in
@@ -32,10 +31,10 @@ const loginController = async (req, res, next) => {
                         role: user.values.role
                     }
                     let options = {
-                        expiresIn: process.env.JWT_EXPIRESIN,
-                        issuer: process.env.JWT_ISSUER
+                        expiresIn: config.JWT_EXPIRESIN,
+                        issuer: config.JWT_ISSUER
                     }
-                    let secret = process.env.JWT_SECRET
+                    let secret = config.JWT_SECRET
                     // assign jwt to token variable defined at top scope
                     token = jwt.sign(
                         payload,

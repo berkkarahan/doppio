@@ -3,8 +3,7 @@ import { selectUserQuery, updateUserQuery } from '../queries/user'
 import { executeQuery } from '../db'
 import * as jwt from 'jsonwebtoken'
 import crypto from 'crypto'
-import dotenv from 'dotenv'
-dotenv.config()
+import { config } from '../config'
 
 // verification controllers(special case; these controllers do not break request-response cycle when called)
 
@@ -34,8 +33,8 @@ export const validateVerificationToken = async (req) => {
     }
 
     let options = {
-        expiresIn: process.env.JWT_EXPIRESIN,
-        issuer: process.env.JWT_ISSUER
+        expiresIn: config.JWT_EXPIRESIN,
+        issuer: config.JWT_ISSUER
     }
 
 
@@ -44,7 +43,7 @@ export const validateVerificationToken = async (req) => {
         if (selectResult.rows.verificationtoken) {
             let vToken = selectResult.rows.verificationtoken
             try {
-                let decoded = jwt.verify(vToken, process.env.JWT_SECRET, options)
+                let decoded = jwt.verify(vToken, config.JWT_SECRET, options)
                 if (decoded.token === queryToken && decoded.username === queryUserName) {
                     let userUpdate = new User({
                         username: decoded.username,
@@ -110,10 +109,10 @@ export const createVerificationToken = async (req) => {
             email: user.values.email
         }
         let options = {
-            expiresIn: process.env.VERIFICATION_JWT_EXPIRESIN,
-            issuer: process.env.JWT_ISSUER
+            expiresIn: config.VERIFICATION_JWT_EXPIRESIN,
+            issuer: config.JWT_ISSUER
         }
-        let secret = process.env.JWT_SECRET
+        let secret = config.JWT_SECRET
         // assign jwt to token variable defined at top scope
         let vToken = jwt.sign(
             payload,
