@@ -17,5 +17,7 @@ export const config = {
     JWT_ISSUER: process.env.JWT_ISSUER,
     JWT_SECRET: process.env.JWT_SECRET,
     COOKIE_SECRET: process.env.COOKIE_SECRET,
-    VERIFICATION_JWT_EXPIRESIN: process.env.VERIFICATION_JWT_EXPIRESIN
+    VERIFICATION_JWT_EXPIRESIN: process.env.VERIFICATION_JWT_EXPIRESIN,
+    EMAIL: process.env.EMAIL,
+    EMAIL_PWD: process.env.EMAIL_PWD
 }

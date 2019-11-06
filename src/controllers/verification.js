@@ -38,8 +38,8 @@ export const validateVerificationToken = async (req) => {
     }
 
 
-
     if (selectResult.status === true) {
+        console.log("💥💥  verification token: " + selectResult.rows.verificationtoken)
         if (selectResult.rows.verificationtoken) {
             let vToken = selectResult.rows.verificationtoken
             try {
@@ -79,6 +79,7 @@ export const validateVerificationToken = async (req) => {
         } else {
             // throw new Error("This user has no verification token.")
             response.status = 'failure-user has no verification token'
+            response.query = selectResult
             return response
         }
     }
@@ -91,6 +92,8 @@ export const createVerificationToken = async (req) => {
     let user = new User(req.body)
     // var token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
     let selectResult = await selectUserQuery(user)
+
+    console.log(selectResult)
 
     // declare response here and fill out rest wrt events
     let response = {

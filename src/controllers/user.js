@@ -1,6 +1,7 @@
 import User from '../serializers/user'
 import { createUserQuery, selectUserQuery, updateUserQuery } from '../queries/user'
 import { createVerificationToken } from './verification'
+import nodemailer from 'nodemailer'
 import bcrypt from 'bcrypt'
 import { config } from '../config'
 
@@ -191,7 +192,36 @@ export const createUser = async (req, res, next) => {
             if (responseJson.status === 'success') {
                 createVerificationToken(req).then(vrfResult => {
                     if (vrfResult.status === 'success') {
-                        responseJson.vToken = response.verification
+                        let baseUrl = req.protocol + '://' + req.get('host')
+                        let verifUrl = baseUrl + `/verify/validate?username=${vrfResult.verification.username}&token=${vrfResult.verification.token}`
+                        responseJson.verificationurl = verifUrl
+                        // send verification email here for the user create route(TEST MAIL).
+                        // ---------------
+                        let testAcc = nodemailer.createTestAccount().then(t => {
+                            return nodemailer.createTransport({
+                                service: 'gmail',//smtp.gmail.com  //in place of service use host...
+                                secure: false,//true
+                                port: 25,//465
+                                auth: {
+                                    user: config.EMAIL,
+                                    pass: config.EMAIL_PWD
+                                }, tls: {
+                                    rejectUnauthorized: false
+                                }
+                            })
+                        }).then(transporter => {
+                            let mailInfo = {
+                                from: config.EMAIL,
+                                to: config.EMAIL,
+                                subject: "user verification testmail",
+                                text: verifUrl
+                            }
+                            return transporter.sendMail(mailInfo)
+                        }).then(info => {
+                            console.log("CHK MAILBOX")
+                        })
+                        // ---------------
+
                         res.status(201).json(responseJson)
                     } else {
                         responseJson.status = vrfResult.status
