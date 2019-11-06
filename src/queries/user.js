@@ -46,12 +46,16 @@ const selectUserQuery = async (usr) => {
     }
     let result = await executeQuery(query, 'select')
     // null values should be deleted before retrieval
-    Object.entries(result.rows[0])
-        .forEach(([k, v]) => {
-            if (v === null) {
-                delete result.rows[0][k]
-            }
-        })
+    try {
+        Object.entries(result.rows[0])
+            .forEach(([k, v]) => {
+                if (v === null) {
+                    delete result.rows[0][k]
+                }
+            })
+    } catch (err) {
+        console.log(err)
+    }
     return result
 }
 
