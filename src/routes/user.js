@@ -85,4 +85,4 @@ userRouter.patch('/user/activate', validateToken, async (req, res, next) => {
     }
 })
 
-export default userRouter
+export default { userRouter }

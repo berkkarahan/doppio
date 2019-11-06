@@ -1,20 +1,30 @@
 import { Router } from 'express'
 import { urlencoded, json } from 'body-parser'
 
-import { createVerificationToken } from '../controllers/verification'
-
-import { validateToken } from '../middlewares/token'
-import { authorizeRoute } from '../utils/authorization'
+import {
+    createVerificationToken,
+    validateVerificationToken
+} from '../controllers/verification'
 
 const verificationRouter = Router()
 
 verificationRouter.use(urlencoded({ extended: true }))
 verificationRouter.use(json())
 
-verificationRouter.post('/verify/create', async (req, res, next) => {
-    res.send('NYI')
+verificationRouter.post('/verify', async (req, res, next) => {
+    let response = await createVerificationToken(req)
+    if (response.status === 'success') {
+        // implement email sending logic here
+        // placeholder
+        // placeholder
+        // placeholder
+    } else {
+        res.status(400).json(response)
+    }
 })
 
 verificationRouter.get('/verify/validate', async (req, res, next) => {
-    res.json(req.query)
+    let response = await validateVerificationToken(req)
 })
+
+export default { verificationRouter }

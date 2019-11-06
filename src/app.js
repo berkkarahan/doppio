@@ -38,7 +38,8 @@ app.use(expressWinston.logger({
 }))
 
 // use routers here
-app.use('/', UserRouter)
+app.use('/', userRouter)
+app.use('/', verificationRouter)
 
 // express - winston errorLogger makes sense AFTER the router.
 app.use(expressWinston.errorLogger({

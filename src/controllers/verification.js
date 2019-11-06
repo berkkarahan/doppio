@@ -1,5 +1,6 @@
 import User from '../serializers/user'
 import { selectUserQuery, updateUserQuery } from '../queries/user'
+import { executeQuery } from '../db'
 import bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 import crypto from 'crypto'
@@ -12,9 +13,11 @@ export const validateVerificationToken = async (req) => {
     // this route is responsible for verifying the verification jwt token
     // if it is valid, user will be updated as verified. if it is invalid due to expiration the token will be deleted
     // query params will be used for this route, not the body
-    let user = new User(req.body)
-    // again token variable will come from query params
-    let queryToken = 'tokenvalue'
+    // token variable will come from query params
+    let queryToken = req.query.token
+    let queryUserName = req.query.username
+
+    let user = new User({ username: queryUserName })
 
     let selectResult = await selectUserQuery(user)
 
@@ -36,7 +39,7 @@ export const validateVerificationToken = async (req) => {
             let vToken = selectResult.rows.verificationtoken
             try {
                 let decoded = jwt.verify(vToken, process.env.JWT_SECRET, options)
-                if (decoded.token === queryToken) {
+                if (decoded.token === queryToken && decoded.username === queryUserName) {
                     let userUpdate = new User({
                         username: decoded.username,
                         email: decoded.email,
@@ -59,8 +62,13 @@ export const validateVerificationToken = async (req) => {
                 // throw new Error(err)
                 response.status = 'failure-jwt token verification error'
                 // in case of verification error delete current token in DB, to be implemented later.
-                // placeholder
-                // placeholder
+                let removeQuery = `
+                UPDATE users set verificationtoken = NULL where username = '${decoded.username}'
+                `
+                let removeResult = await executeQuery(removeQuery, 'void')
+                if (removeResult.status !== true) {
+                    response.status = response.status + '-token removal failed'
+                }
                 return response
             }
         } else {
