@@ -27,8 +27,6 @@ export const validateVerificationToken = async (req) => {
 
     let user = new User({ username: queryUserName })
 
-    console.log(user)
-
     let selectResult = await selectUserQuery(user)
     if (selectResult.status === false) {
         response.status = 'failure-this user does not exist'
