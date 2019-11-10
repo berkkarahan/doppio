@@ -4,9 +4,7 @@
   "description": "doppio, user microservice of the hermes platform",
   "main": "src/server.js",
   "scripts": {
-    "test": "babel-node src/test/supertest.js",
     "dev": "nodemon --exec babel-node src/server.js",
-    "babeltry": "babel-node src/try.js",
     "build": "babel src --out-dir dist",
     "serve": "node dist/server.js",
     "start": "nodemon --exec babel-node src/server.js"
@@ -37,7 +35,6 @@
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
     "babel-plugin-add-module-exports": "^1.0.2",
-    "babel-plugin-dotenv-import": "^2.0.0",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.4.0",
