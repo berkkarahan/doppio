@@ -66,3 +66,4 @@ src/try.js
 
 # untrack dist folder resulting from babel compilation
 dist/
+doppio_archive/
