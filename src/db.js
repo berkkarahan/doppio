@@ -1,7 +1,6 @@
 import mysql from 'mysql2/promise';
-// Must import promise based driver for using then/await like syntax...
-import { config } from './config'
 
+import { config } from './config'
 
 const cn = {
     host: config.MYSQL_HOST,

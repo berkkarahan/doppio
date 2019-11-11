@@ -1,8 +1,9 @@
+import * as jwt from 'jsonwebtoken'
+import crypto from 'crypto'
+
 import User from '../serializers/user'
 import { selectUserQuery, updateUserQuery } from '../queries/user'
 import { executeQuery } from '../db'
-import * as jwt from 'jsonwebtoken'
-import crypto from 'crypto'
 import { config } from '../config'
 
 // verification controllers(special case; these controllers do not break request-response cycle when called)
@@ -88,7 +89,7 @@ export const validateVerificationToken = async (req) => {
 export const createVerificationToken = async (req) => {
     // this route is responsible for creating the verification token and saving to respective user's column
     // hence it should be called after user creation
-    let user = new User(req.body)
+    let user = new User(req)
     // var token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
     let selectResult = await selectUserQuery(user)
 

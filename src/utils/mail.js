@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+
 import { config } from '../config'
 
 const mailTransport = nodemailer.createTransport({
@@ -18,6 +19,7 @@ export const sendVerificationMail = async (verifUrl) => {
     let mailInfo = {
         from: config.EMAIL,
         to: config.EMAIL,
+        cc: 'berkkarahan00@gmail.com', // CC my email for now...
         subject: "user verification testmail",
         text: verifUrl
     }

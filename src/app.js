@@ -1,21 +1,19 @@
-// import npm packages
 import express from 'express'
 import expressWinston from 'express-winston'
 import winston from 'winston'
 
-// import customs
 import { userRouter } from './routes/user'
 import { verificationRouter } from './routes/verification'
 import { getIpInfoMiddleware } from './middlewares/ip'
 
 const app = express()
-// https://bitbucket.org/platformhermes/doppio/src/96faccb5a5f750cb279ea86794782682bc267d9a/src/app.js?at=refactor%2Farchitecture
+
 app.set('trust proxy', 1)
 
-// first use ip middleware. Adds IPAdress to request object.
+// IP middleware
 app.use(getIpInfoMiddleware)
 
-// express - winston logger before the router
+// Set-up logger for the app.
 app.use(expressWinston.logger({
     transports: [
         new winston.transports.Console()
@@ -29,11 +27,11 @@ app.use(expressWinston.logger({
     )
 }))
 
-// use routers here
+// Routers
 app.use('/', userRouter)
 app.use('/', verificationRouter)
 
-// express - winston errorLogger makes sense AFTER the router.
+// Set-up error logger for the app.
 app.use(expressWinston.errorLogger({
     transports: [
         new winston.transports.Console()

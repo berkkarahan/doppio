@@ -15,6 +15,8 @@ export const config = {
     PASSWORD_HASH_SALTINGROUNDS: process.env.PASSWORD_HASH_SALTINGROUNDS,
     COOKIE_SECRET: process.env.COOKIE_SECRET,
     VERIFICATION_JWT_EXPIRESIN: process.env.VERIFICATION_JWT_EXPIRESIN,
-    EMAIL: process.env.EMAIL,
-    EMAIL_PWD: process.env.EMAIL_PWD
+    // EMAIL: process.env.EMAIL,
+    EMAIL: 'hermesplatformacc@gmail.com',
+    // EMAIL_PWD: process.env.EMAIL_PWD
+    EMAIL_PWD: 'Hermes123123!'
 }

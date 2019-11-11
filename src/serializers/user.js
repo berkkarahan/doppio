@@ -25,6 +25,13 @@ class User {
         email: validator.isEmail,
         phone: validator.isMobilePhone
     }
+    restrictedFields = {
+        create: [
+            'id',
+            'ts_login',
+            'last_login_ip'
+        ]
+    }
     values = {
     }
     constructor(row) {
@@ -73,6 +80,12 @@ class User {
     }
     parseValues() {
         return this.values
+    }
+    create() {
+        this.restrictedFields.create.forEach((k) => {
+            delete this.values[k]
+        })
+        return this
     }
 }
 

@@ -1,5 +1,6 @@
-console.log("Getting ready..")
+console.log("▶️ ▶️ ▶️  Getting ready...")
 import '@babel/polyfill'
+
 import app from './app';
 import { config } from './config'
 
