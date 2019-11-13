@@ -8,8 +8,6 @@ const userRouter = Router()
 userRouter.use(urlencoded({ extended: true }))
 userRouter.use(json())
 
-// Actual routes start;
-// create user
 userRouter.post('/user', async (req, res, next) => {
     createUser(req, res, next)
 })

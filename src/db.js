@@ -15,7 +15,6 @@ const cn = {
 const pool = new mysql.createPool(cn)
 
 const _execute = async (query) => {
-    console.log("Query in execution: " + query)
     let queryResult = await pool.execute(query)
     let result = {
         rows: queryResult[0],
@@ -26,7 +25,6 @@ const _execute = async (query) => {
 
 const executeQuery = async (query, queryType) => {
     try {
-        // execute query regardless of its type in the beginning.
         let results = await _execute(query, pool)
         if (queryType === 'void') {
             return {

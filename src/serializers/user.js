@@ -74,7 +74,8 @@ class User {
                         }
                     }
                 } else {
-                    throw new Error("Key: " + key + " is not in users table.")
+                    // We should not throw an error here, since we are simply not adding any keys not in our default field list.
+                    console.log("Key: " + key + " is not in users table.")
                 }
             })
     }

@@ -37,26 +37,31 @@ export const createUser = async (req, res, next) => {
     }
 
     // create verification token to be sent via email
-    let verificationTokenResult = await createVerificationToken(req.body)
+    let verificationTokenResult = await createVerificationToken(req)
     if (verificationTokenResult.status === 'success') {
         let baseUrl = req.protocol + '://' + req.get('host')
-        let verifUrl = baseUrl + `/verify/validate?username=${verificationTokenResult.verification.username}&token=${verificationTokenResult.verification.token}`
+        let verifUrl = baseUrl + `/verify/validate?username=${verificationTokenResult.data.username}&token=${verificationTokenResult.data.token}`
 
         // Send the verification mail
         await sendVerificationMail(verifUrl)
+
+        let userValues = user.parseValues()
 
         res.status(201).json({
             status: 'success',
             verificationurl: verifUrl,
             data: {
-                user
+                userValues
             }
         })
     } else {
+
+        let userValues = user.parseValues()
+
         res.status(400).json({
             status: verificationTokenResult.status,
             data: {
-                user
+                userValues
             }
         })
     }

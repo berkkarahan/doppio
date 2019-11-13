@@ -1,10 +1,9 @@
 import { Router } from 'express'
 import { urlencoded, json } from 'body-parser'
 
-import {
-    createVerificationToken,
-    validateVerificationToken
-} from '../controllers/verification'
+import { createVerificationToken, validateVerificationToken } from '../controllers/verification'
+import { verificationCheck } from '../utils/verifcheck'
+
 
 const verificationRouter = Router()
 
@@ -15,12 +14,10 @@ verificationRouter.post('/verify', async (req, res, next) => {
     let response = await createVerificationToken(req)
     if (response.status === 'success') {
 
-        // implement email sending logic here
         let baseUrl = req.protocol + '://' + req.get('host')
         let verifUrl = baseUrl + `/verify/validate?username=${vrfResult.verification.username}&token=${vrfResult.verification.token}`
         response.verificationurl = verifUrl
 
-        // send the verification mail
         await sendVerificationMail(verifUrl)
 
         res.status(200).json(response)
@@ -31,8 +28,20 @@ verificationRouter.post('/verify', async (req, res, next) => {
 })
 
 verificationRouter.get('/verify/validate', async (req, res, next) => {
-    let response = await validateVerificationToken(req)
-    res.json(response)
+    req.body.token = req.query.token
+    req.body.username = req.query.username
+    let checkResult = await verificationCheck(req)
+
+    if (!checkResult) {
+        let response = await validateVerificationToken(req)
+        res.json(response)
+    } else {
+        res.status(400).json({
+            status: 'failure-user is already verified for this username',
+            username: req.body.username,
+            token: req.body.token
+        })
+    }
 })
 
 export default { verificationRouter }
