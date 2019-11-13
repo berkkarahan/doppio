@@ -10,35 +10,8 @@ Account microservice
 
 User serializer is a utility for creating new User objects either from requests or database calls. Checks for default inputs and validators.
 
-All fields
-
-- id(auto generated)
-- username
-- email
-- password
-- firstname
-- lastname
-- phone
-- address
-- gender
-- birthday
-- role
-- register_ip
-- last_login_ip
-- ts_login
-- ts_register
-- is_active
-- is_verified
-
-#### Default input values for fields
-
-| Field       | Value                     |
-| ----------- | ------------------------- |
-| gender      | 'female', 'male', 'other' |
-| role        | 'user', 'owner'           |
-| is_active   | 1, 0                      |
-| is_verified | 1, 0                      |
+Check create_user_table.sql for details of the table.
 
 ## Routes
 
-To be written later
+TODO (Berk) [11/13/2019]: Add routes section to readme.md
