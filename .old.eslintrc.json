@@ -1,22 +1,9 @@
 {
-  "env": {
-    "browser": true,
-    "es2020": true,
-    "node": true
-  },
-  "extends": ["airbnb-base", "prettier", "plugin:node/recommended"],
+  "extends": ["airbnb", "prettier", "plugin:node/recommended"],
   "plugins": ["prettier"],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
-  "parserOptions": {
-    // "ecmaVersion": 2019,
-    "sourceType": "module"
-  },
+  "env": { "node": true, "browser": true },
   "rules": {
     "prettier/prettier": "error",
-    "node/no-unsupported-features/es-syntax": "off",
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",

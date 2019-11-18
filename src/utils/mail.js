@@ -1,29 +1,29 @@
-import nodemailer from 'nodemailer'
+import nodemailer from 'nodemailer';
 
-import { config } from '../config'
+import { config } from '../config';
 
 const mailTransport = nodemailer.createTransport({
-    service: 'gmail',
-    secure: false,
-    port: 25,
-    auth: {
-        user: config.EMAIL,
-        pass: config.EMAIL_PWD
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-})
+  service: 'gmail',
+  secure: false,
+  port: 25,
+  auth: {
+    user: config.EMAIL,
+    pass: config.EMAIL_PWD
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
 
-export const sendVerificationMail = async (verifUrl) => {
-    let mailInfo = {
-        from: config.EMAIL,
-        to: config.EMAIL,
-        cc: 'berkkarahan00@gmail.com', // CC my email for now...
-        subject: "user verification testmail",
-        text: verifUrl
-    }
+export const sendVerificationMail = async verifUrl => {
+  const mailInfo = {
+    from: config.EMAIL,
+    to: config.EMAIL,
+    cc: 'berkkarahan00@gmail.com', // CC my email for now...
+    subject: 'user verification testmail',
+    text: verifUrl
+  };
 
-    // send the mail
-    await mailTransport.sendMail(mailInfo)
-}
+  // send the mail
+  await mailTransport.sendMail(mailInfo);
+};

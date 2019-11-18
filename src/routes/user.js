@@ -1,15 +1,15 @@
-import { Router } from 'express'
-import { urlencoded, json } from 'body-parser'
+import { Router } from 'express';
+import { urlencoded, json } from 'body-parser';
 
-import { createUser } from '../controllers/user'
+import { createUser } from '../controllers/user';
 
-const userRouter = Router()
+const userRouter = Router();
 
-userRouter.use(urlencoded({ extended: true }))
-userRouter.use(json())
+userRouter.use(urlencoded({ extended: true }));
+userRouter.use(json());
 
 userRouter.post('/user', async (req, res, next) => {
-    createUser(req, res, next)
-})
+  createUser(req, res, next);
+});
 
-export default { userRouter }
+export default { userRouter };
