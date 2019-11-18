@@ -1,26 +1,25 @@
 import { executeQuery } from '../db'
 
 const createUserQuery = async (usr) => {
-    let keys = Object.keys(usr.values)
+    const keys = Object.keys(usr.values)
         .join(", ")
-    let values = Object.values(usr.values)
+    const values = Object.values(usr.values)
         .map((val) => {
             return "'" + val + "'"
         })
         .join(", ")
 
-    let query = `INSERT INTO users ( ${keys} ) VALUES ( ${values} )`
+    const query = `INSERT INTO users ( ${keys} ) VALUES ( ${values} )`
     return await executeQuery(query, 'void')
 }
 
 const selectUserQuery = async (usr) => {
     let query = `SELECT * from users WHERE `
 
-    if (usr.values.email) {
-        query += `email = '${usr.values.email}'`
-    } else if (usr.values.username && query.length < 27) {
-        query += `username = '${usr.values.username}'`
-    }
+    // Prioritize email over username for WHERE condition
+    const queryKey = usr.values.email || usr.values.username
+    const queryKeyName = Object.keys(usr.values).find(key => usr.values[key] === queryKey)
+    query += `${queryKeyName} = '${queryKey}'`
 
     let result = await executeQuery(query, 'select')
 
@@ -31,21 +30,19 @@ const selectUserQuery = async (usr) => {
                 delete result.rows[k]
             }
         })
-
     return result
 }
 
 const updateUserQuery = async (usr) => {
     let query = `UPDATE users SET `
     const kvPairs = Object.entries(usr.values).map(([key, value]) => { return `${key}='${value}'` })
-
     query += kvPairs.join(', ')
 
-    if (usr.values.email) {
-        query += ` WHERE email = '${usr.values.email}'`
-    } else if (usr.values.username && query.length < 27) {
-        query += ` WHERE username = '${usr.values.username}'`
-    }
+    // Prioritize email over username for WHERE condition
+    const queryKey = usr.values.email || usr.values.username
+    const queryKeyName = Object.keys(usr.values).find(key => usr.values[key] === queryKey)
+    query += ` WHERE ${queryKeyName} = '${queryKey}'`
+
     return await executeQuery(query, 'void')
 }
 

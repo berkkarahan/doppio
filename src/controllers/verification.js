@@ -109,6 +109,6 @@ export const createVerificationToken = async (req) => {
 
     return {
         status: status ? 'success' : 'failure-token update for user failed',
-        data: {}
+        data: status ? { username: user.values.username, token: token } : {}
     }
 }
