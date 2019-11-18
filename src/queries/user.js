@@ -10,17 +10,16 @@ const createUserQuery = async (usr) => {
         .join(", ")
 
     let query = `INSERT INTO users ( ${keys} ) VALUES ( ${values} )`
-    let result = await executeQuery(query, 'void')
-    return result
+    return await executeQuery(query, 'void')
 }
 
 const selectUserQuery = async (usr) => {
     let query = `SELECT * from users WHERE `
 
     if (usr.values.email) {
-        query = query + `email = '${usr.values.email}'`
+        query += `email = '${usr.values.email}'`
     } else if (usr.values.username && query.length < 27) {
-        query = query + `username = '${usr.values.username}'`
+        query += `username = '${usr.values.username}'`
     }
 
     let result = await executeQuery(query, 'select')
@@ -32,26 +31,22 @@ const selectUserQuery = async (usr) => {
                 delete result.rows[k]
             }
         })
+
     return result
 }
 
 const updateUserQuery = async (usr) => {
     let query = `UPDATE users SET `
-    Object.entries(usr.values)
-        .map(([key, value]) => { return `${key}='${value}', ` })
-        .forEach((kvPair) => {
-            query = query + kvPair
-        })
+    const kvPairs = Object.entries(usr.values).map(([key, value]) => { return `${key}='${value}'` })
 
-    query = query.substring(0, query.length - 2)
+    query += kvPairs.join(', ')
 
     if (usr.values.email) {
-        query = query + ` WHERE email = '${usr.values.email}'`
+        query += ` WHERE email = '${usr.values.email}'`
     } else if (usr.values.username && query.length < 27) {
-        query = query + ` WHERE username = '${usr.values.username}'`
+        query += ` WHERE username = '${usr.values.username}'`
     }
-    let result = await executeQuery(query, 'void')
-    return result
+    return await executeQuery(query, 'void')
 }
 
 export default {
