@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-import { config } from './config';
+import config from './config';
 
 const cn = {
   host: config.MYSQL_HOST,
@@ -52,6 +52,4 @@ const executeQuery = async (query, queryType) => {
   }
 };
 
-export default {
-  executeQuery
-};
+export default executeQuery;

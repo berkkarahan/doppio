@@ -1,4 +1,4 @@
-import { executeQuery } from '../db';
+import executeQuery from '../db';
 
 const createUserQuery = async usr => {
   const keys = Object.keys(usr.values).join(', ');
@@ -50,8 +50,10 @@ const updateUserQuery = async usr => {
   return await executeQuery(query, 'void');
 };
 
-export default {
-  createUserQuery,
-  selectUserQuery,
-  updateUserQuery
+const userQueries = {
+  create: createUserQuery,
+  select: selectUserQuery,
+  update: updateUserQuery
 };
+
+export default userQueries;

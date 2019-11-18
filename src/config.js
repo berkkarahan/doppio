@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const config = {
+const config = {
   PORT: process.env.PORT,
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_ISSUER: process.env.JWT_ISSUER,
@@ -21,3 +21,5 @@ export const config = {
   // EMAIL_PWD: process.env.EMAIL_PWD
   EMAIL_PWD: 'Hermes123123!'
 };
+
+export default config;

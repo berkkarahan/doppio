@@ -1,9 +1,9 @@
-import { selectUserQuery } from '../queries/user';
+import queries from '../queries/user';
 import User from '../serializers/user';
 
 export const verificationCheck = async req => {
   const user = new User(req.body);
-  const selectResult = await selectUserQuery(user);
+  const selectResult = await queries.select(user);
   if (selectResult.status) {
     console.log(selectResult);
     const selectedUser = new User(selectResult.rows);

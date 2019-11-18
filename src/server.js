@@ -1,7 +1,7 @@
 import '@babel/polyfill';
 
 import app from './app';
-import { config } from './config';
+import config from './config';
 
 console.log('▶️ ▶️ ▶️  Getting ready...');
 
@@ -14,6 +14,6 @@ console.log('▶️ ▶️ ▶️  Getting ready...');
 //       "add-module-exports"
 //     ]
 //   }
-const listener = app.listen(config.PORT, function() {
+const listener = app.listen(config.PORT, function () {
   console.log(`Listening on port: ${listener.address().port}`);
 });

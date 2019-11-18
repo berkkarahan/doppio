@@ -1,10 +1,8 @@
 import { Router } from 'express';
 import { urlencoded, json } from 'body-parser';
 
-import {
-  createVerificationToken,
-  validateVerificationToken
-} from '../controllers/verification';
+import verification from '../controllers/verification';
+import mail from '../utils/mail';
 import { verificationCheck } from '../utils/verifcheck';
 
 const verificationRouter = Router();
@@ -13,17 +11,16 @@ verificationRouter.use(urlencoded({ extended: true }));
 verificationRouter.use(json());
 
 verificationRouter.post('/verify', async (req, res, next) => {
-  const response = await createVerificationToken(req);
-  if (response.status === 'success') {
+  const { status, data } = await verification.create(req);
+  if (status === 'success') {
     const baseUrl = `${req.protocol}://${req.get('host')}`;
-    const verifUrl = `${baseUrl}/verify/validate?username=${vrfResult.verification.username}&token=${vrfResult.verification.token}`;
-    response.verificationurl = verifUrl;
+    const verifUrl = `${baseUrl}/verify/validate?username=${data.username}&token=${data.token}`;
 
-    await sendVerificationMail(verifUrl);
+    await mail.verification(verifUrl);
 
-    res.status(200).json(response);
+    res.status(200).json({ status: 'success', verification: verifUrl });
   } else {
-    res.status(400).json(response);
+    res.status(400).json({ status: 'failure' });
   }
 });
 
@@ -33,7 +30,7 @@ verificationRouter.get('/verify/validate', async (req, res, next) => {
   const checkResult = await verificationCheck(req);
 
   if (!checkResult) {
-    const response = await validateVerificationToken(req);
+    const response = await verification.validate(req);
     res.json(response);
   } else {
     res.status(400).json({

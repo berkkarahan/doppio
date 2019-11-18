@@ -17,6 +17,7 @@
   "rules": {
     "prettier/prettier": "error",
     "node/no-unsupported-features/es-syntax": "off",
+    "import/prefer-default-export": "off",
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",

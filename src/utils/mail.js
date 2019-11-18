@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-import { config } from '../config';
+import config from '../config';
 
 const mailTransport = nodemailer.createTransport({
   service: 'gmail',
@@ -15,7 +15,7 @@ const mailTransport = nodemailer.createTransport({
   }
 });
 
-export const sendVerificationMail = async verifUrl => {
+const sendVerificationMail = async verifUrl => {
   const mailInfo = {
     from: config.EMAIL,
     to: config.EMAIL,
@@ -27,3 +27,9 @@ export const sendVerificationMail = async verifUrl => {
   // send the mail
   await mailTransport.sendMail(mailInfo);
 };
+
+const mail = {
+  verification: sendVerificationMail
+};
+
+export default mail;

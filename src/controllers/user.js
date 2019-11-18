@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 import moment from 'moment';
 
-import { config } from '../config';
+import config from '../config';
 import User from '../serializers/user';
-import { createUserQuery } from '../queries/user';
-import { createVerificationToken } from './verification';
-import { sendVerificationMail } from '../utils/mail';
+import userQueries from '../queries/user';
+import verification from './verification';
+import mail from '../utils/mail';
 
 export const createUser = async (req, res, next) => {
   // Creates a serialised User object for the controller, deleting restricted fields for user creation.
@@ -29,7 +29,7 @@ export const createUser = async (req, res, next) => {
   user.values.password = hashedPassword;
 
   // Execute the create query.
-  const queryResult = await createUserQuery(user);
+  const queryResult = await userQueries.create(user);
 
   // In case of any error; break request cycle & send response.
   if (!queryResult.status) {
@@ -40,14 +40,13 @@ export const createUser = async (req, res, next) => {
   }
 
   // create verification token to be sent via email
-  // let verificationTokenResult = await createVerificationToken(req)
-  const { status, data } = await createVerificationToken(req);
+  const { status, data } = await verification.create(req);
   if (status === 'success') {
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const verifUrl = `${baseUrl}/verify/validate?username=${data.username}&token=${data.token}`;
 
     // Send the verification mail
-    await sendVerificationMail(verifUrl);
+    await mail.verification(verifUrl);
 
     const userValues = user.parseValues();
 
@@ -62,7 +61,7 @@ export const createUser = async (req, res, next) => {
     const userValues = user.parseValues();
 
     res.status(400).json({
-      status: verificationTokenResult.status,
+      status: status,
       data: {
         userValues
       }

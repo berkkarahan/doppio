@@ -2,18 +2,18 @@ import * as jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
 import User from '../serializers/user';
-import { selectUserQuery, updateUserQuery } from '../queries/user';
-import { executeQuery } from '../db';
-import { config } from '../config';
+import userQueries from '../queries/user';
+import executeQuery from '../db';
+import config from '../config';
 
 // verification controllers(special case; these controllers do not break request-response cycle when called)
-export const validateVerificationToken = async req => {
+const validateVerificationToken = async req => {
   const queryToken = req.query.token;
   const queryUserName = req.query.username;
 
   const user = new User({ username: queryUserName });
 
-  const selectResult = await selectUserQuery(user);
+  const selectResult = await userQueries.select(user);
 
   if (!selectResult.status) {
     return {
@@ -52,7 +52,7 @@ export const validateVerificationToken = async req => {
     }
 
     const userUpdate = new User({ username, email, is_verified: 1 });
-    const { status } = await updateUserQuery(userUpdate);
+    const { status } = await userQueries.update(userUpdate);
 
     return {
       status: status ? 'success' : 'failure-error updating is_verified field',
@@ -74,11 +74,11 @@ export const validateVerificationToken = async req => {
   }
 };
 
-export const createVerificationToken = async req => {
+const createVerificationToken = async req => {
   // this route is responsible for creating the verification token and saving to respective user's column
   // hence it should be called after user creation
   const user = new User(req.body);
-  const selectResult = await selectUserQuery(user);
+  const selectResult = await userQueries.select(user);
 
   if (!selectResult.status) {
     return {
@@ -108,10 +108,17 @@ export const createVerificationToken = async req => {
     verificationtoken: vToken
   });
 
-  const { status } = await updateUserQuery(userUpdate);
+  const { status } = await userQueries.update(userUpdate);
 
   return {
     status: status ? 'success' : 'failure-token update for user failed',
     data: status ? { username: user.values.username, token: token } : {}
   };
 };
+
+const verification = {
+  create: createVerificationToken,
+  validate: validateVerificationToken
+};
+
+export default verification;
