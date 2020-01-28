@@ -1,21 +1,19 @@
-import '@babel/polyfill'
+import '@babel/polyfill';
+
 import app from './app';
-import { PORT } from '@env'
-// const port = process.env.PORT;
+import config from './config';
+
+console.log('▶️ ▶️ ▶️  Getting ready...');
 
 // listener must be declared with const / var
 // .babelrc configuration is critical
 // {
 //     "presets": ["@babel/preset-env"],
 //     "plugins": [
-//       "add-module-exports",
-//       [
-//         "dotenv-import",
-//         {
-//           "moduleName": "@env",
-//           "path": "config.env"
-//         }
-//       ]
+//       "@babel/plugin-proposal-class-properties",
+//       "add-module-exports"
 //     ]
 //   }
-console.log("Getting ready..")
+const listener = app.listen(config.PORT, function () {
+  console.log(`Listening on port: ${listener.address().port}`);
+});
