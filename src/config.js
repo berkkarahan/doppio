@@ -17,9 +17,9 @@ const config = {
   COOKIE_SECRET: process.env.COOKIE_SECRET,
   VERIFICATION_JWT_EXPIRESIN: process.env.VERIFICATION_JWT_EXPIRESIN,
   // EMAIL: process.env.EMAIL,
-  EMAIL: 'hermesplatformacc@gmail.com',
+  EMAIL: '',
   // EMAIL_PWD: process.env.EMAIL_PWD
-  EMAIL_PWD: 'Hermes123123!'
+  EMAIL_PWD: ''
 };
 
 export default config;
